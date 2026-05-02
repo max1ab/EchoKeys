@@ -54,6 +54,55 @@ struct MIDIAudioConverterTests {
     }
 
     @Test
+    func inspectorReportsShortMIDIStats() throws {
+        let tempDirectory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(
+            at: tempDirectory,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
+        let midiURL = tempDirectory.appending(path: "sample.mid")
+        try MIDIByteFixtures.shortPianoMIDI().write(to: midiURL)
+
+        let inspector = MIDIFileInspector()
+        let info = try inspector.inspectMIDIFile(at: midiURL)
+
+        #expect(info.trackCount == 1)
+        #expect(info.noteEventCount == 2)
+        #expect(info.tempoEventCount == 1)
+        #expect(info.sustainPedalEventCount == 2)
+        #expect(info.duration > 0.9)
+        #expect(info.duration < 1.1)
+    }
+
+    @Test
+    func inspectorHandlesEmptyAndMultiTrackMIDI() throws {
+        let tempDirectory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
+        try FileManager.default.createDirectory(
+            at: tempDirectory,
+            withIntermediateDirectories: true,
+            attributes: nil
+        )
+        let emptyURL = tempDirectory.appending(path: "empty.mid")
+        let multiURL = tempDirectory.appending(path: "multi.mid")
+        try MIDIByteFixtures.emptyMIDI().write(to: emptyURL)
+        try MIDIByteFixtures.multiTrackMIDI().write(to: multiURL)
+
+        let inspector = MIDIFileInspector()
+        let emptyInfo = try inspector.inspectMIDIFile(at: emptyURL)
+        let multiInfo = try inspector.inspectMIDIFile(at: multiURL)
+
+        #expect(emptyInfo.trackCount == 1)
+        #expect(emptyInfo.noteEventCount == 0)
+        #expect(emptyInfo.duration == 0)
+        #expect(multiInfo.trackCount == 3)
+        #expect(multiInfo.noteEventCount == 2)
+        #expect(multiInfo.tempoEventCount == 1)
+        #expect(multiInfo.duration > 0.4)
+        #expect(multiInfo.duration < 0.6)
+    }
+
+    @Test
     func rendererCreatesWaveFile() throws {
         let tempDirectory = FileManager.default.temporaryDirectory.appending(path: UUID().uuidString, directoryHint: .isDirectory)
         try FileManager.default.createDirectory(

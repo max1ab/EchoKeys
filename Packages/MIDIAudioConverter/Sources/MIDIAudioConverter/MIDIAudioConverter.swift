@@ -8,4 +8,8 @@ public enum MIDIAudioConverterModule {
     public static func makeRenderer() -> MIDIFileRenderer {
         MIDIFileRenderer()
     }
+
+    public static func makeInspector() -> MIDIFileInspector {
+        MIDIFileInspector()
+    }
 }

@@ -61,6 +61,28 @@ public struct MIDIAudioRenderResult: Sendable, Equatable {
     }
 }
 
+public struct MIDIFileInfo: Sendable, Equatable {
+    public let duration: TimeInterval
+    public let trackCount: Int
+    public let noteEventCount: Int
+    public let tempoEventCount: Int
+    public let sustainPedalEventCount: Int
+
+    public init(
+        duration: TimeInterval,
+        trackCount: Int,
+        noteEventCount: Int,
+        tempoEventCount: Int,
+        sustainPedalEventCount: Int
+    ) {
+        self.duration = duration
+        self.trackCount = trackCount
+        self.noteEventCount = noteEventCount
+        self.tempoEventCount = tempoEventCount
+        self.sustainPedalEventCount = sustainPedalEventCount
+    }
+}
+
 public enum MIDIConversionError: LocalizedError, Equatable {
     case inputMustBeLocalFile
     case outputMustBeLocalFile

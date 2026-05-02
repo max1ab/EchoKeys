@@ -15,3 +15,7 @@ public protocol MIDIFileRendering {
         options: MIDIRenderOptions
     ) throws -> MIDIAudioRenderResult
 }
+
+public protocol MIDIFileInspecting {
+    func inspectMIDIFile(at midiURL: URL) throws -> MIDIFileInfo
+}
