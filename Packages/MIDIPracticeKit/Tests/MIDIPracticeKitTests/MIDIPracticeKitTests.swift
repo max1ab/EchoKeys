@@ -123,6 +123,29 @@ final class MIDIPracticeKitTests: XCTestCase {
         XCTAssertEqual(report.level1.matchedCount, 1)
     }
 
+    func testMIDIWrapperEstimatesTempoScale() throws {
+        let kit = MIDIPracticeKit()
+        let target = TestMIDIFile(ticksPerQuarter: 480, notes: [
+            TestNote(pitch: 60, start: 0, duration: 480),
+            TestNote(pitch: 62, start: 480, duration: 480),
+            TestNote(pitch: 64, start: 960, duration: 480),
+            TestNote(pitch: 65, start: 1440, duration: 480),
+        ]).data()
+        let performance = TestMIDIFile(ticksPerQuarter: 480, notes: [
+            TestNote(pitch: 60, start: 0, duration: 432),
+            TestNote(pitch: 62, start: 432, duration: 432),
+            TestNote(pitch: 64, start: 864, duration: 432),
+            TestNote(pitch: 65, start: 1296, duration: 432),
+        ]).data()
+
+        let report = try kit.score(targetMIDI: target, performanceMIDI: performance)
+
+        XCTAssertEqual(report.estimatedTempoScale, 0.9, accuracy: 0.0001)
+        XCTAssertEqual(report.level1.matchedCount, 4)
+        XCTAssertEqual(report.level2.onsetTimingScore, 1, accuracy: 0.0001)
+        XCTAssertEqual(report.level2.durationScore, 1, accuracy: 0.0001)
+    }
+
     func testUnclosedMIDINoteProducesWarningAndDoesNotCrash() throws {
         let kit = MIDIPracticeKit()
         let good = TestMIDIFile(ticksPerQuarter: 480, notes: [

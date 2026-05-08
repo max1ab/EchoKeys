@@ -111,6 +111,8 @@ public struct MIDIPracticeConfiguration: Codable, Sendable, Equatable {
     public var chordSyncToleranceBeat: Double
     public var duplicateEpsilonBeat: Double
     public var offsetAnchorCount: Int
+    public var minTempoScale: Double
+    public var maxTempoScale: Double
 
     public init(
         onsetToleranceBeat: Double = 0.125,
@@ -122,7 +124,9 @@ public struct MIDIPracticeConfiguration: Codable, Sendable, Equatable {
         pitchMismatchPenalty: Double = 0.2,
         chordSyncToleranceBeat: Double = 0.05,
         duplicateEpsilonBeat: Double = 0.0001,
-        offsetAnchorCount: Int = 8
+        offsetAnchorCount: Int = 8,
+        minTempoScale: Double = 0.75,
+        maxTempoScale: Double = 1.35
     ) {
         self.onsetToleranceBeat = onsetToleranceBeat
         self.durationToleranceBeat = durationToleranceBeat
@@ -134,6 +138,8 @@ public struct MIDIPracticeConfiguration: Codable, Sendable, Equatable {
         self.chordSyncToleranceBeat = chordSyncToleranceBeat
         self.duplicateEpsilonBeat = duplicateEpsilonBeat
         self.offsetAnchorCount = offsetAnchorCount
+        self.minTempoScale = minTempoScale
+        self.maxTempoScale = maxTempoScale
     }
 
     public static let `default` = MIDIPracticeConfiguration()
@@ -167,6 +173,7 @@ public struct MIDIPracticeReport: Codable, Sendable, Equatable {
     public var errors: [PracticeErrorItem]
     public var warnings: [String]
     public var estimatedOffsetBeat: Double
+    public var estimatedTempoScale: Double
 }
 
 public struct AlignmentItem: Codable, Sendable, Equatable, Identifiable {

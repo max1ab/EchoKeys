@@ -38,7 +38,8 @@ for sampleCase in manifest.cases {
         onsetTimingScore: report.level2.onsetTimingScore,
         interOnsetScore: report.level2.interOnsetScore,
         durationScore: report.level2.durationScore,
-        estimatedOffsetBeat: report.estimatedOffsetBeat
+        estimatedOffsetBeat: report.estimatedOffsetBeat,
+        estimatedTempoScale: report.estimatedTempoScale
     ))
 
     var failures: [String] = []
@@ -97,6 +98,7 @@ struct ScoreRow {
     var interOnsetScore: Double
     var durationScore: Double
     var estimatedOffsetBeat: Double
+    var estimatedTempoScale: Double
 }
 
 func printScoreTable(_ rows: [ScoreRow]) {
@@ -104,7 +106,7 @@ func printScoreTable(_ rows: [ScoreRow]) {
 
     let headers = [
         "case", "match", "miss", "extra", "wrong",
-        "pitch", "complete", "onset", "inter", "duration", "offset",
+        "pitch", "complete", "onset", "inter", "duration", "offset", "scale",
     ]
     let body = rows.map { row in
         [
@@ -119,6 +121,7 @@ func printScoreTable(_ rows: [ScoreRow]) {
             format(row.interOnsetScore),
             format(row.durationScore),
             format(row.estimatedOffsetBeat),
+            format(row.estimatedTempoScale),
         ]
     }
 

@@ -163,7 +163,7 @@ let manifest = SampleManifest(cases: [
         scoreRanges: ScoreRanges(
             onsetTimingScore: ScoreRange(min: 0.6, max: 0.99),
             interOnsetScore: ScoreRange(min: 0.3, max: 0.99),
-            durationScore: ScoreRange(min: 0.95, max: 1)
+            durationScore: ScoreRange(min: 0.9, max: 1)
         )
     ),
     SampleCase(
@@ -241,9 +241,9 @@ let manifest = SampleManifest(cases: [
             wrongPitchCount: 0
         ),
         scoreRanges: ScoreRanges(
-            onsetTimingScore: ScoreRange(min: 0.0, max: 0.95),
-            interOnsetScore: ScoreRange(min: 0.0, max: 0.95),
-            durationScore: ScoreRange(min: 0.0, max: 0.95)
+            onsetTimingScore: ScoreRange(min: 1, max: 1),
+            interOnsetScore: ScoreRange(min: 1, max: 1),
+            durationScore: ScoreRange(min: 1, max: 1)
         )
     ),
 ])

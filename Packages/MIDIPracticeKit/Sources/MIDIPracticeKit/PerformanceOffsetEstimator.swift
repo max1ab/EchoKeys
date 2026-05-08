@@ -1,18 +1,18 @@
-import Foundation
-
-struct PerformanceOffsetEstimator {
+struct PerformanceTimingEstimator {
     var configuration: MIDIPracticeConfiguration
 
-    func estimate(target: [NoteEvent], performance: [NoteEvent]) -> Double {
+    func estimate(target: [NoteEvent], performance: [NoteEvent]) -> PerformanceTimingEstimate {
         let target = target.practiceSorted()
         let performance = performance.practiceSorted()
-        guard !target.isEmpty, !performance.isEmpty else { return 0 }
+        guard !target.isEmpty, !performance.isEmpty else {
+            return PerformanceTimingEstimate(offsetBeat: 0, tempoScale: 1)
+        }
 
         var usedPerformance = Set<String>()
-        var deltas: [Double] = []
+        var anchors: [(target: NoteEvent, performance: NoteEvent)] = []
 
         for targetEvent in target {
-            guard deltas.count < configuration.offsetAnchorCount else { break }
+            guard anchors.count < configuration.offsetAnchorCount else { break }
             let candidates = performance
                 .filter { $0.pitch == targetEvent.pitch && !usedPerformance.contains($0.id) }
                 .sorted {
@@ -21,14 +21,44 @@ struct PerformanceOffsetEstimator {
 
             guard let best = candidates.first else { continue }
             usedPerformance.insert(best.id)
-            deltas.append(best.onsetBeat - targetEvent.onsetBeat)
+            anchors.append((targetEvent, best))
         }
 
-        if deltas.isEmpty {
-            return performance[0].onsetBeat - target[0].onsetBeat
+        guard !anchors.isEmpty else {
+            return PerformanceTimingEstimate(
+                offsetBeat: performance[0].onsetBeat - target[0].onsetBeat,
+                tempoScale: 1
+            )
         }
 
-        return median(deltas)
+        let tempoScale = estimateTempoScale(from: anchors)
+        let offsets = anchors.map { anchor in
+            anchor.performance.onsetBeat - anchor.target.onsetBeat * tempoScale
+        }
+
+        return PerformanceTimingEstimate(
+            offsetBeat: median(offsets),
+            tempoScale: tempoScale
+        )
+    }
+
+    private func estimateTempoScale(from anchors: [(target: NoteEvent, performance: NoteEvent)]) -> Double {
+        guard anchors.count >= 2 else { return 1 }
+
+        var ratios: [Double] = []
+        for index in 1..<anchors.count {
+            let targetIOI = anchors[index].target.onsetBeat - anchors[index - 1].target.onsetBeat
+            let performanceIOI = anchors[index].performance.onsetBeat - anchors[index - 1].performance.onsetBeat
+            guard targetIOI > 0, performanceIOI > 0 else { continue }
+
+            let ratio = performanceIOI / targetIOI
+            guard ratio >= configuration.minTempoScale,
+                  ratio <= configuration.maxTempoScale else { continue }
+            ratios.append(ratio)
+        }
+
+        guard ratios.count >= 3 else { return 1 }
+        return median(ratios)
     }
 
     private func median(_ values: [Double]) -> Double {
@@ -39,4 +69,9 @@ struct PerformanceOffsetEstimator {
         }
         return sorted[middle]
     }
+}
+
+struct PerformanceTimingEstimate {
+    var offsetBeat: Double
+    var tempoScale: Double
 }

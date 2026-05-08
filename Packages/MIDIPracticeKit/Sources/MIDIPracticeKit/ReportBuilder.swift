@@ -8,7 +8,8 @@ struct ReportBuilder {
         performance: [NoteEvent],
         alignment: [AlignmentItem],
         warnings: [String],
-        estimatedOffsetBeat: Double
+        estimatedOffsetBeat: Double,
+        estimatedTempoScale: Double
     ) -> MIDIPracticeReport {
         let errors = buildErrors(from: alignment, target: target, performance: performance)
         return MIDIPracticeReport(
@@ -21,7 +22,8 @@ struct ReportBuilder {
             summaries: buildSummaries(target: target, alignment: alignment),
             errors: errors,
             warnings: warnings,
-            estimatedOffsetBeat: estimatedOffsetBeat
+            estimatedOffsetBeat: estimatedOffsetBeat,
+            estimatedTempoScale: estimatedTempoScale
         )
     }
 

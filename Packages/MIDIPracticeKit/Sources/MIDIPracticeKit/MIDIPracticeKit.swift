@@ -27,7 +27,8 @@ public struct MIDIPracticeKit: Sendable {
             performance: sortedPerformance,
             alignment: alignment,
             warnings: [],
-            estimatedOffsetBeat: 0
+            estimatedOffsetBeat: 0,
+            estimatedTempoScale: 1
         )
     }
 
@@ -56,11 +57,12 @@ public struct MIDIPracticeKit: Sendable {
             )
         }
 
-        let offset = PerformanceOffsetEstimator(configuration: configuration)
+        let timing = PerformanceTimingEstimator(configuration: configuration)
             .estimate(target: targetEvents, performance: performanceConversion.events)
         let adjustedPerformance = performanceConversion.events.map { event in
             var copy = event
-            copy.onsetBeat -= offset
+            copy.onsetBeat = (copy.onsetBeat - timing.offsetBeat) / timing.tempoScale
+            copy.durationBeat /= timing.tempoScale
             return copy
         }
 
@@ -72,7 +74,8 @@ public struct MIDIPracticeKit: Sendable {
             performance: adjustedPerformance.practiceSorted(),
             alignment: alignment,
             warnings: warnings,
-            estimatedOffsetBeat: offset
+            estimatedOffsetBeat: timing.offsetBeat,
+            estimatedTempoScale: timing.tempoScale
         )
     }
 

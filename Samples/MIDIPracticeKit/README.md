@@ -47,8 +47,8 @@ PASS short
 PASS lead-in
 PASS speed
 
-case         match  miss  extra  wrong  pitch   complete  onset   inter   duration  offset
------------  -----  ----  -----  -----  ------  --------  ------  ------  --------  ------
+case         match  miss  extra  wrong  pitch   complete  onset   inter   duration  offset  scale
+-----------  -----  ----  -----  -----  ------  --------  ------  ------  --------  ------  -----
 ...
 ```
 
