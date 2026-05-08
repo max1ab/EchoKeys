@@ -79,7 +79,7 @@ MIDI Data
 - 同 key 重叠 note on 使用 FIFO 配对。
 - 未闭合音符丢弃，并写入 `warnings`。
 
-Performance 会先估计整体起点偏移和整体速度比例：
+Performance 会先估计起始偏移和整体速度比例：
 
 ```text
 adjustedPerformanceOnset = (performanceOnset - estimatedOffsetBeat) / estimatedTempoScale
@@ -94,6 +94,8 @@ estimatedTempoScale = median(ratio)
 ```
 
 其中 `estimatedTempoScale = 1.0` 表示整体速度一致，`> 1.0` 表示用户整体更慢，`< 1.0` 表示用户整体更快。只有落在配置范围内的 ratio 会参与估计，避免把中间停顿误判为整体变慢。
+
+`estimatedOffsetBeat` 是起始校准量，用开头少数 pitch-matched 音符的 onset delta 中位数估计。它用于消除录音前空白或起步等待，不作为分数，也不应该吸收中间停顿。
 
 ---
 

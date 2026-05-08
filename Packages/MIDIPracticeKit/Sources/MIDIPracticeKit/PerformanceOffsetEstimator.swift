@@ -12,7 +12,6 @@ struct PerformanceTimingEstimator {
         var anchors: [(target: NoteEvent, performance: NoteEvent)] = []
 
         for targetEvent in target {
-            guard anchors.count < configuration.offsetAnchorCount else { break }
             let candidates = performance
                 .filter { $0.pitch == targetEvent.pitch && !usedPerformance.contains($0.id) }
                 .sorted {
@@ -32,7 +31,8 @@ struct PerformanceTimingEstimator {
         }
 
         let tempoScale = estimateTempoScale(from: anchors)
-        let offsets = anchors.map { anchor in
+        let offsetAnchors = Array(anchors.prefix(configuration.offsetAnchorCount))
+        let offsets = offsetAnchors.map { anchor in
             anchor.performance.onsetBeat - anchor.target.onsetBeat * tempoScale
         }
 

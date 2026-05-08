@@ -117,14 +117,14 @@ public struct MIDIPracticeConfiguration: Codable, Sendable, Equatable {
     public init(
         onsetToleranceBeat: Double = 0.125,
         durationToleranceBeat: Double = 0.25,
-        maxMatchWindowBeat: Double = 0.5,
+        maxMatchWindowBeat: Double = 1.0,
         insertCost: Double = 1.0,
         deleteCost: Double = 1.0,
         wrongPitchCost: Double = 0.8,
         pitchMismatchPenalty: Double = 0.2,
         chordSyncToleranceBeat: Double = 0.05,
         duplicateEpsilonBeat: Double = 0.0001,
-        offsetAnchorCount: Int = 8,
+        offsetAnchorCount: Int = 3,
         minTempoScale: Double = 0.75,
         maxTempoScale: Double = 1.35
     ) {
