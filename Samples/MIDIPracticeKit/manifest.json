@@ -1,0 +1,204 @@
+{
+  "cases" : [
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "perfect",
+      "performance" : "generated\/basic\/perfect.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 1
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 7,
+        "missedCount" : 0,
+        "wrongPitchCount" : 1
+      },
+      "name" : "wrong-pitch",
+      "performance" : "generated\/basic\/wrong-pitch.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 0.95
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 1
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "loose",
+      "performance" : "generated\/basic\/loose.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 0.9
+        },
+        "interOnsetScore" : {
+          "max" : 0.99,
+          "min" : 0.3
+        },
+        "onsetTimingScore" : {
+          "max" : 0.99,
+          "min" : 0.6
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "pause",
+      "performance" : "generated\/basic\/pause.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 0.95
+        },
+        "interOnsetScore" : {
+          "max" : 0.9,
+          "min" : 0
+        },
+        "onsetTimingScore" : {
+          "max" : 0.5,
+          "min" : 0
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 1,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "fix",
+      "performance" : "generated\/basic\/fix.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 0.9
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 0.4
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 0.75
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "short",
+      "performance" : "generated\/basic\/short.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 0.85,
+          "min" : 0
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 1
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "lead-in",
+      "performance" : "generated\/basic\/lead-in.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 1
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    },
+    {
+      "expected" : {
+        "extraCount" : 0,
+        "matchedCount" : 8,
+        "missedCount" : 0,
+        "wrongPitchCount" : 0
+      },
+      "name" : "speed",
+      "performance" : "generated\/basic\/speed.mid",
+      "scoreRanges" : {
+        "durationScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "interOnsetScore" : {
+          "max" : 1,
+          "min" : 1
+        },
+        "onsetTimingScore" : {
+          "max" : 1,
+          "min" : 1
+        }
+      },
+      "target" : "generated\/basic\/target.mid"
+    }
+  ]
+}
