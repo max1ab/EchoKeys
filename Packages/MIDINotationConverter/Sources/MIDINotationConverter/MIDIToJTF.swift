@@ -64,14 +64,17 @@ public struct MIDIToJTF {
             let notes = matchNotePairs(in: track.notes, fallbackTicks: division)
             guard !notes.isEmpty else { continue }
 
-            let measures = buildMeasures(
-                from: notes,
-                ticksPerQuarter: division,
-                timeSig: timeSig,
-                key: key
-            )
-            let name = tracks.count > 1 ? "Track\(idx + 1)" : nil
-            voices.append(Voice(name: name, measures: measures))
+            let voiceNotes = splitIntoNotationVoices(notes)
+            for (voiceIdx, notes) in voiceNotes.enumerated() {
+                let measures = buildMeasures(
+                    from: notes,
+                    ticksPerQuarter: division,
+                    timeSig: timeSig,
+                    key: key
+                )
+                let name = voiceName(trackIndex: idx, voiceIndex: voiceIdx, trackCount: tracks.count, voiceCount: voiceNotes.count)
+                voices.append(Voice(name: name, measures: measures))
+            }
         }
 
         guard !voices.isEmpty else {
@@ -116,6 +119,45 @@ public struct MIDIToJTF {
         }
 
         return paired.sorted { $0.tick < $1.tick || ($0.tick == $1.tick && $0.note < $1.note) }
+    }
+
+    // MARK: - Voice splitting
+
+    private func splitIntoNotationVoices(_ notes: [MIDINoteEvent]) -> [[MIDINoteEvent]] {
+        var voices: [[MIDINoteEvent]] = []
+        let sortedNotes = notes.sorted {
+            $0.tick < $1.tick || ($0.tick == $1.tick && $0.duration > $1.duration)
+        }
+
+        for note in sortedNotes {
+            if let index = voices.indices.first(where: { canPlace(note, in: voices[$0]) }) {
+                voices[index].append(note)
+            } else {
+                voices.append([note])
+            }
+        }
+
+        return voices
+    }
+
+    private func canPlace(_ note: MIDINoteEvent, in voice: [MIDINoteEvent]) -> Bool {
+        let simultaneous = voice.filter { $0.tick == note.tick }
+        if !simultaneous.isEmpty {
+            return simultaneous.allSatisfy { $0.duration == note.duration }
+        }
+
+        let voiceEnd = voice.map { $0.tick + $0.duration }.max() ?? 0
+        return note.tick >= voiceEnd
+    }
+
+    private func voiceName(trackIndex: Int, voiceIndex: Int, trackCount: Int, voiceCount: Int) -> String? {
+        if trackCount == 1 && voiceCount == 1 {
+            return nil
+        }
+        if voiceCount == 1 {
+            return "Track\(trackIndex + 1)"
+        }
+        return "Track\(trackIndex + 1)-Voice\(voiceIndex + 1)"
     }
 
     // MARK: - Build measures

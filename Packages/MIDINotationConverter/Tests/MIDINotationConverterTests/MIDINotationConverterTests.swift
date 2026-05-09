@@ -51,6 +51,23 @@ import Testing
         #expect(atoms[2].pitch == 5)
     }
 
+    @Test func rejectChordWithMixedDurationsInOneVoice() throws {
+        let text = """
+        1=C 4/4
+        | { [#4] [7]__ } 1 ||
+        """
+
+        do {
+            _ = try JTFParser().parse(text)
+            Issue.record("Expected mixed-duration chord to fail")
+            return
+        } catch let error as NotationConversionError {
+            #expect(error.localizedDescription.contains("same duration"))
+        } catch {
+            Issue.record("Unexpected error: \(error)")
+        }
+    }
+
     @Test func parseAccidentals() throws {
         let text = """
         1=G 4/4
@@ -253,6 +270,24 @@ import Testing
         #expect(noteOff.tick == division * 4)
     }
 
+    @Test func midiDecodeSplitsSameOnsetDifferentDurationsIntoVoices() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+        let midiURL = tempDir.appendingPathComponent("test_split_voices.mid")
+        try makeMIDIFile(
+            division: 480,
+            notes: [
+                (note: 60, startTick: 0, duration: 480),
+                (note: 67, startTick: 0, duration: 120),
+            ]
+        ).write(to: midiURL)
+
+        let jtf = try MIDIToJTF().convert(midiURL: midiURL)
+        #expect(jtf.contains("V:Track1-Voice1"))
+        #expect(jtf.contains("V:Track1-Voice2"))
+        #expect(!jtf.contains("{ 1 5_ }"))
+        _ = try JTFParser().parse(jtf)
+    }
+
     @Test func midiDecodeUsesFileDivisionForDurations() throws {
         let tempDir = FileManager.default.temporaryDirectory
         let midiURL = tempDir.appendingPathComponent("test_960_tpq.mid")
@@ -320,11 +355,26 @@ import Testing
 }
 
 private func makeSingleNoteMIDI(division: Int, startTick: Int, duration: Int) -> Data {
+    makeMIDIFile(division: division, notes: [(note: 60, startTick: startTick, duration: duration)])
+}
+
+private func makeMIDIFile(division: Int, notes: [(note: Int, startTick: Int, duration: Int)]) -> Data {
+    var events: [(tick: Int, bytes: [UInt8])] = []
+    for note in notes {
+        events.append((note.startTick, [0x90, UInt8(note.note), 80]))
+        events.append((note.startTick + note.duration, [0x80, UInt8(note.note), 0]))
+    }
+    events.sort {
+        $0.tick < $1.tick || ($0.tick == $1.tick && $0.bytes[0] == 0x80 && $1.bytes[0] != 0x80)
+    }
+
     var track: [UInt8] = []
-    track.append(contentsOf: encodeVarLen(startTick))
-    track.append(contentsOf: [0x90, 60, 80])
-    track.append(contentsOf: encodeVarLen(duration))
-    track.append(contentsOf: [0x80, 60, 0])
+    var previousTick = 0
+    for event in events {
+        track.append(contentsOf: encodeVarLen(event.tick - previousTick))
+        track.append(contentsOf: event.bytes)
+        previousTick = event.tick
+    }
     track.append(contentsOf: [0x00, 0xFF, 0x2F, 0x00])
 
     var bytes: [UInt8] = []

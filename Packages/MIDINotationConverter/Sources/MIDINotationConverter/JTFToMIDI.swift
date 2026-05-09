@@ -76,19 +76,16 @@ public struct JTFToMIDI {
                     noteEventCount += 1
 
                 case .chord(let atoms):
-                    let durations = Set(atoms.map { Int($0.duration.beats * Float64(ticksPerBeat)) })
-                    let durTicks = durations.first ?? ticksPerBeat
-                    var midiNotes: [Int] = []
+                    var maxDurTicks = 0
                     for atom in atoms {
+                        let durTicks = Int(atom.duration.beats * Float64(ticksPerBeat))
                         let n = atomToMIDI(atom, key: key)
-                        midiNotes.append(n)
                         events.append((currentTick, midiNoteOn(note: n, velocity: 80)))
+                        events.append((currentTick + durTicks, midiNoteOff(note: n)))
+                        maxDurTicks = max(maxDurTicks, durTicks)
                         noteEventCount += 1
                     }
-                    for n in midiNotes {
-                        events.append((currentTick + durTicks, midiNoteOff(note: n)))
-                    }
-                    currentTick += durTicks
+                    currentTick += maxDurTicks
 
                 case .rest(let dur):
                     currentTick += Int(dur.beats * Float64(ticksPerBeat))

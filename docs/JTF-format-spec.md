@@ -1,6 +1,8 @@
-# JTF (Jianpu Text Format) 规范
+# JTF (Jianpu Text Format) v0 规范
 
-简谱纯文本标记语言，用于 MIDI ↔ 简谱双向转换。可嵌入 Markdown 代码块，人可读写，无歧义解析。
+简谱纯文本标记语言，用于基础 MIDI ↔ 简谱转换。v0 目标是覆盖简单钢琴练习片段：音高、基础时值、休止、和弦、多声部，以及少量 MIDI meta 信息。
+
+JTF v0 不是完整乐谱协议，也不是 MIDI 的无损文本表示。MIDI 中的力度、踏板、音色、复杂 tempo map、channel 语义和多数演奏控制信息不会完整保留。
 
 ---
 
@@ -41,7 +43,7 @@ V:伴奏
 
 ## 2. 元素参考
 
-### 2.1 头信息（必需，第一行）
+### 2.1 头信息（可选，推荐第一行）
 
 ```
 1=C 4/4       调号 + 拍号
@@ -57,6 +59,8 @@ Key     := [A-G] ("#" | "b")?
 TimeSig := Digit+ "/" Digit+
 Tempo   := Digit+
 ```
+
+没有头信息时，当前实现使用默认值：`1=C 4/4 120`。
 
 ### 2.2 音高
 
@@ -126,7 +130,7 @@ Underscore := "_"
 Extend    := " -"        // 每个 " -" 延长一拍；空格分隔的独立 token
 ```
 
-**约束**：附点 `.` 必须在 `_` 之前。`3_.` 非法，`3._` 合法。附点后不能再附点——`3..` 非法。
+**约束**：附点 `.` 必须在 `_` 之前。`3_.` 非法，`3._` 合法。附点后不能再附点，`3..` 非法。
 
 ### 2.5 和弦（柱式，同时发音）
 
@@ -155,9 +159,14 @@ Chord := "{" Note+ "}"
 ^         连音线／圆滑线（连接不同音高，如 3 ^ 5）
 ```
 
-延音线 `~` 和连音线 `^` 是独立的 token。
+v0 中：
 
-### 2.7 三连音及其他连音
+- `|`、`||`、`|:`、`:|` 会被解析和序列化为结构标记。
+- 反复不会展开为重复播放。
+- `~` 和 `^` 会被解析和序列化，但当前不改变 MIDI 生成结果。
+- 实际持续时值请使用 `-`。
+
+### 2.7 连音符（experimental）
 
 ```
 (3 1_ 2_ 3_)          三连音（一拍内均分三个八分）
@@ -171,6 +180,8 @@ Tuplet := "(" Count Note+ ")"
 Count  := Digit+
 ```
 
+当前实现可以解析基础 tuplet token，并在 JTF → MIDI 时按一拍均分生成简单 note。MIDI → JTF 不会反推出 tuplet。复杂嵌套、跨拍和精确排版暂不属于 v0 稳定范围。
+
 ### 2.8 多声部
 
 ```
@@ -178,9 +189,11 @@ V:声部名
 音符行...
 ```
 
-声部按 `V:` 分组，同名 `V:` 可跨行继续。不同声部的时间线独立但对齐——小节数必须一致。
+声部按 `V:` 分组。不同声部的时间线独立。
 
 解析时，不同 `V:` 映射到不同的 MIDI track。
+
+v0 不强制校验不同声部的小节数或小节时值是否一致。
 
 ### 2.9 和弦符号（可选标注行）
 
@@ -188,15 +201,15 @@ V:声部名
 Ch: C Am F G7
 ```
 
-仅作为标注，不参与 MIDI 转换（除非后续实现织体模板展开）。
+仅作为标注，不参与 MIDI 转换。织体模板不属于 v0。
 
 ---
 
-## 3. EBNF 完整语法
+## 3. EBNF 语法
 
 ```ebnf
 (* 顶层 *)
-Score       := Header NL (VoiceBlock NL?)+
+Score       := Header? NL? (VoiceBlock NL?)+
 
 Header      := "1=" Key " " TimeSig (" " Tempo)?
 Key         := Letter ("#" | "b")?
@@ -250,6 +263,8 @@ Identifier  := (Alnum | "_" | "-")+
 NL          := "\n"
 ```
 
+说明：EBNF 描述当前可解析的文本形状，不代表所有 token 都有完整音乐语义。
+
 ---
 
 ## 4. MIDI ↔ JTF 映射规则
@@ -298,8 +313,9 @@ TotalTicks := DurationToTicks(note) + count(Extend) × TicksPerQuarter
 #### 多声部映射
 
 - 每个 `V:` 声部 → 一个 MIDI track
-- 第一条 `V:` → track 0（或 1，取决于 SMF 约定）
+- 单声部输出 format 0；多声部输出 format 1
 - `Ch:` 行不生成 MIDI 事件（纯标注）
+- 每个 track 写入相同的 tempo、time signature、key signature meta event
 
 ### 4.2 MIDI → JTF
 
@@ -308,7 +324,8 @@ TotalTicks := DurationToTicks(note) + count(Extend) × TicksPerQuarter
 遍历每个 MIDI track：
 1. 收集 Note On (velocity > 0) 和对应的 Note Off
 2. 计算 delta ticks → 时长
-3. 聚合同一 tick 位置的所有 Note On → 和弦 `{ }`
+3. 同一 voice 内同一 tick、同一时值的 Note On → 和弦 `{ }`
+4. 同一 tick 但不同时值、或相互重叠的音符会拆成多个 `V:`
 
 #### 音高反查
 
@@ -330,14 +347,26 @@ TotalTicks := DurationToTicks(note) + count(Extend) × TicksPerQuarter
 
 ```
 ticks → 拍数 → 匹配最佳时值后缀
-  优先匹配精确值
-  次选最接近的标准时值 + 容差阈值
-  连音需要判定（如三拍内三个均等音 → 三连音标记）
+  在固定候选集合中取最近值
 ```
+
+当前候选集合包括：`0.25, 0.375, 0.5, 0.75, 1, 1.5, 2, 3, 4, 6, 8` 拍。MIDI → JTF 不反推 tuplet。
 
 #### 调号推断（当 MIDI 文件无 Key Signature meta event 时）
 
-算法：统计音符集合，与 24 个大/小调音阶做 Krumhansl-Schmuckler 相关系数匹配，取最高分。
+算法：统计音符集合，与大调候选做 Krumhansl-Schmuckler 相关系数匹配，取最高分。minor key meta event 会映射到相对小调 tonic，但 v0 没有独立大小调语法。
+
+### 4.3 v0 不保证保留的信息
+
+- velocity / dynamics
+- pedal / controller
+- program change / instrument
+- channel 的业务含义
+- 多段 tempo map
+- pitch bend / aftertouch
+- lyric / marker / cue 等 meta event
+- 反复展开、slur/tie 演奏语义
+- 原始 MIDI 轨道名和复杂排版信息
 
 ---
 
@@ -358,15 +387,12 @@ ticks → 拍数 → 匹配最佳时值后缀
 
 ---
 
-## 6. TODO: 织体模板
+## 6. 后续 TODO
 
-```
-texture alberti: {
-    @ = [1 5 3 5]      (* 默认模板：根→五→三→五 *)
-}
-
-B: C Am F G7           (* 和弦进行 *)
-   alberti             (* 引用织体名，自动展开为分解和弦音符 *)
-```
-
-织体模板在 MIDI → JTF 方向无意义（MIDI 里已经是具体音符）。仅在 JTF → MIDI 方向展开。
+- 明确大小调语法
+- 小节时值校验
+- 更完整的量化策略
+- tuplet 反推
+- tie/slur 的 MIDI 语义
+- repeat 展开
+- 织体模板
