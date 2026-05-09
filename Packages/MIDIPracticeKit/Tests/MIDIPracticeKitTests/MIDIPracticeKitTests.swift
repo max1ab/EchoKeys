@@ -35,6 +35,7 @@ final class MIDIPracticeKitTests: XCTestCase {
         XCTAssertEqual(report.level1.wrongPitchCount, 1)
         XCTAssertEqual(report.level1.missedCount, 0)
         XCTAssertEqual(report.level1.extraCount, 0)
+        XCTAssertEqual(report.level1.completeness, 0)
         XCTAssertEqual(report.errors.map(\.type), [.wrongPitch])
     }
 

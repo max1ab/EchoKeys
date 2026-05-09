@@ -2,6 +2,8 @@
 
 This directory contains MIDI files for manual and command-line testing of `MIDIPracticeKit`.
 
+Generated files are committed when they are useful regression fixtures. Add real recordings only when they capture a clear issue or representative case.
+
 ## Generate
 
 From the repository root:

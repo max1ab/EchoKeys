@@ -37,7 +37,7 @@ struct ReportBuilder {
 
         return Level1Score(
             pitchAccuracy: clamp01(Double(matched) / Double(totalDenominator)),
-            completeness: clamp01(Double(matched + wrong) / Double(targetDenominator)),
+            completeness: clamp01(Double(matched) / Double(targetDenominator)),
             matchedCount: matched,
             missedCount: missed,
             extraCount: extra,

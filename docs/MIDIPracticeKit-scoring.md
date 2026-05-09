@@ -155,13 +155,13 @@ wrongPitchCount
 
 ```text
 pitchAccuracy = matchedCount / (targetCount + extraCount)
-completeness = (matchedCount + wrongPitchCount) / targetCount
+completeness = matchedCount / targetCount
 ```
 
 解释：
 
 - `pitchAccuracy` 惩罚错音、漏音和多音。
-- `completeness` 只看目标时间线是否被用户事件覆盖；错音也算“覆盖到目标位置”，但不算按对音。
+- `completeness` 只统计目标音中被正确弹出的比例；错音不算完成。
 - 所有分数范围是 `0...1`。UI 如需百分制可乘以 100。
 
 一级错误类型：
