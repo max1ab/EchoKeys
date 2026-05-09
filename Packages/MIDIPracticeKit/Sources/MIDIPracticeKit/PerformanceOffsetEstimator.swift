@@ -1,3 +1,5 @@
+import PianoPracticeCore
+
 struct PerformanceTimingEstimator {
     var configuration: MIDIPracticeConfiguration
 

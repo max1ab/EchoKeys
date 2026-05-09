@@ -13,9 +13,13 @@ let package = Package(
             targets: ["MIDIPracticeKit"]
         ),
     ],
+    dependencies: [
+        .package(path: "../PianoPracticeCore"),
+    ],
     targets: [
         .target(
-            name: "MIDIPracticeKit"
+            name: "MIDIPracticeKit",
+            dependencies: ["PianoPracticeCore"]
         ),
         .testTarget(
             name: "MIDIPracticeKitTests",

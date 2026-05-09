@@ -1,4 +1,5 @@
 import Foundation
+import PianoPracticeCore
 
 public struct MIDIPracticeKit: Sendable {
     public init() {}

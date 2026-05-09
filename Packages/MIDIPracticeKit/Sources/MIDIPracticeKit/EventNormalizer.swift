@@ -1,4 +1,5 @@
 import Foundation
+import PianoPracticeCore
 
 enum EventNormalizer {
     static func normalizeTargetDuplicates(

@@ -2,6 +2,9 @@
 
 Event-based MIDI practice scoring.
 
+The scoring event model is `PianoPracticeCore.NoteEvent`. `MIDIPracticeKit.NoteEvent`
+is kept as a compatibility alias while callers migrate.
+
 ## API
 
 Use events when the caller already has normalized notes:
@@ -52,4 +55,3 @@ maxTempoScale = 1.35
 ```
 
 More detail: [../../docs/MIDIPracticeKit-scoring.md](../../docs/MIDIPracticeKit-scoring.md).
-

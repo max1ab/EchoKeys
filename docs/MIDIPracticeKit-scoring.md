@@ -1,6 +1,6 @@
 # MIDIPracticeKit 评分标准说明
 
-`MIDIPracticeKit` 的评分核心只处理 event，不直接处理 MIDI 文件语义。MIDI 只是输入适配器：先被解析并归一化为 `NoteEvent`，再进入对齐和评分流程。
+`MIDIPracticeKit` 的评分核心只处理 event，不直接处理 MIDI 文件语义。MIDI 只是输入适配器：先被解析并归一化为 `PianoPracticeCore.NoteEvent`，再进入对齐和评分流程。`NoteEvent` 目前只是 `MIDIPracticeKit` 中保留的兼容别名。
 
 ---
 

@@ -1,4 +1,5 @@
 import Foundation
+import PianoPracticeCore
 
 struct JTFAnnotationExtractor {
     func extract(from text: String) -> JTFAnnotationExtraction {

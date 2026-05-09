@@ -1,4 +1,5 @@
 import Foundation
+import PianoPracticeCore
 
 struct MIDIEventConverter {
     var prefix: String
