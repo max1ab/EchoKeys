@@ -64,7 +64,7 @@ struct ContentView: View {
                         .tag(section)
                 }
             }
-            .navigationTitle("Piano Learn")
+            .navigationTitle("EchoKeys")
             .listStyle(.sidebar)
         } detail: {
             switch selectedSection.wrappedValue {
@@ -85,10 +85,10 @@ struct ContentView: View {
 private struct HomeView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text("Piano Learn")
+            Text("EchoKeys")
                 .font(.largeTitle.bold())
 
-            Text("Select a test page from the sidebar.")
+            Text("Learn piano by ear.")
                 .foregroundStyle(.secondary)
 
             Spacer()

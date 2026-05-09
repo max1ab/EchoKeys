@@ -1,11 +1,13 @@
-# piano-learn
+# EchoKeys
+
+Learn piano by ear.
 
 macOS SwiftUI playground for MIDI/JTF conversion, playback, rendering, and MIDI practice scoring.
 
 ## Structure
 
 ```text
-piano-learn/                    macOS app
+piano-learn/                    EchoKeys macOS app
 Packages/MIDIAudioConverter/    MIDI playback/render helpers
 Packages/MIDINotationConverter/ JTF <-> MIDI conversion
 Packages/MIDIPracticeKit/       event-based MIDI practice scoring
@@ -26,4 +28,3 @@ swift run MIDIPracticeSampleRunner
 ```
 
 The sample runner prints PASS/FAIL plus a score table for the committed MIDI fixtures.
-
