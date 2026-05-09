@@ -15,7 +15,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		B392DE0F2F8B53A10000E8EC /* piano-learn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "piano-learn.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		B392DE0F2F8B53A10000E8EC /* piano-learn.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = "piano-learn.app"; path = EchoKeys.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */

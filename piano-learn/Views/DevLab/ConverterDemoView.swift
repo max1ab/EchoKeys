@@ -1,104 +1,7 @@
-//
-//  ContentView.swift
-//  piano-learn
-//
-//  Created by r00t on 2026/4/12.
-//
-
 import SwiftUI
 import UniformTypeIdentifiers
 
-private enum DevSection: String, CaseIterable, Identifiable {
-    case home
-    case midiInput
-    case practice
-    case converterDemo
-
-    var id: Self { self }
-
-    var title: String {
-        switch self {
-        case .home:
-            "Home"
-        case .midiInput:
-            "MIDI Input"
-        case .practice:
-            "Practice"
-        case .converterDemo:
-            "MIDI / JTF Demo"
-        }
-    }
-
-    var systemImage: String {
-        switch self {
-        case .home:
-            "house"
-        case .midiInput:
-            "pianokeys"
-        case .practice:
-            "metronome"
-        case .converterDemo:
-            "music.note.list"
-        }
-    }
-}
-
-struct ContentView: View {
-    @SceneStorage("selectedDevSection") private var selectedSectionRawValue = DevSection.home.rawValue
-    @StateObject private var midiInputDebugController = MIDIInputDebugController()
-    @StateObject private var practiceDebugController = PracticeDebugController()
-
-    private var selectedSection: Binding<DevSection> {
-        Binding {
-            DevSection(rawValue: selectedSectionRawValue) ?? .home
-        } set: { newValue in
-            selectedSectionRawValue = newValue.rawValue
-        }
-    }
-
-    var body: some View {
-        NavigationSplitView {
-            List(selection: selectedSection) {
-                ForEach(DevSection.allCases) { section in
-                    Label(section.title, systemImage: section.systemImage)
-                        .tag(section)
-                }
-            }
-            .navigationTitle("EchoKeys")
-            .listStyle(.sidebar)
-        } detail: {
-            switch selectedSection.wrappedValue {
-            case .home:
-                HomeView()
-            case .midiInput:
-                MIDIInputDebugView(controller: midiInputDebugController)
-            case .practice:
-                PracticeDebugView(controller: practiceDebugController)
-            case .converterDemo:
-                ConverterDemoView()
-            }
-        }
-        .frame(minWidth: 900, minHeight: 600)
-    }
-}
-
-private struct HomeView: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text("EchoKeys")
-                .font(.largeTitle.bold())
-
-            Text("Learn piano by ear.")
-                .foregroundStyle(.secondary)
-
-            Spacer()
-        }
-        .padding()
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-    }
-}
-
-private struct ConverterDemoView: View {
+struct ConverterDemoView: View {
     @StateObject private var controller = MIDIDemoController()
     @State private var isMIDIImporterPresented = false
 
@@ -202,8 +105,4 @@ private struct ConverterDemoView: View {
             }
         }
     }
-}
-
-#Preview {
-    ContentView()
 }
