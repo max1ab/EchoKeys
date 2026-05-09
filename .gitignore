@@ -10,6 +10,11 @@ xcuserdata/
 
 # Swift Package Manager
 Package.resolved
+.swiftpm/
 
 # Package-local build artifacts
 Packages/**/.build/
+Packages/**/.swiftpm/
+
+# Local tooling
+.claude/

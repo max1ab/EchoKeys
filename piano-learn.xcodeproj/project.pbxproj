@@ -8,6 +8,10 @@
 
 /* Begin PBXBuildFile section */
 		4DE4BC8A2F90800100000001 /* MIDIAudioConverter in Frameworks */ = {isa = PBXBuildFile; productRef = 4DE4BC8C2F90800100000001 /* MIDIAudioConverter */; };
+		4DE4BC8D2F90800100000001 /* MIDINotationConverter in Frameworks */ = {isa = PBXBuildFile; productRef = 4DE4BC8F2F90800100000001 /* MIDINotationConverter */; };
+		4DE4BC902F90800100000001 /* MIDIInputKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4DE4BC922F90800100000001 /* MIDIInputKit */; };
+		4DE4BC932F90800100000001 /* PianoPracticeCore in Frameworks */ = {isa = PBXBuildFile; productRef = 4DE4BC952F90800100000001 /* PianoPracticeCore */; };
+		4DE4BC962F90800100000001 /* MIDIPracticeKit in Frameworks */ = {isa = PBXBuildFile; productRef = 4DE4BC982F90800100000001 /* MIDIPracticeKit */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -28,6 +32,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				4DE4BC8A2F90800100000001 /* MIDIAudioConverter in Frameworks */,
+				4DE4BC8D2F90800100000001 /* MIDINotationConverter in Frameworks */,
+				4DE4BC902F90800100000001 /* MIDIInputKit in Frameworks */,
+				4DE4BC932F90800100000001 /* PianoPracticeCore in Frameworks */,
+				4DE4BC962F90800100000001 /* MIDIPracticeKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -71,6 +79,10 @@
 			name = "piano-learn";
 			packageProductDependencies = (
 				4DE4BC8C2F90800100000001 /* MIDIAudioConverter */,
+				4DE4BC8F2F90800100000001 /* MIDINotationConverter */,
+				4DE4BC922F90800100000001 /* MIDIInputKit */,
+				4DE4BC952F90800100000001 /* PianoPracticeCore */,
+				4DE4BC982F90800100000001 /* MIDIPracticeKit */,
 			);
 			productName = "piano-learn";
 			productReference = B392DE0F2F8B53A10000E8EC /* piano-learn.app */;
@@ -102,6 +114,10 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				4DE4BC8B2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIAudioConverter" */,
+				4DE4BC8E2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDINotationConverter" */,
+				4DE4BC912F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIInputKit" */,
+				4DE4BC942F90800100000001 /* XCLocalSwiftPackageReference "Packages/PianoPracticeCore" */,
+				4DE4BC972F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIPracticeKit" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B392DE102F8B53A10000E8EC /* Products */;
@@ -132,21 +148,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin XCLocalSwiftPackageReference section */
-		4DE4BC8B2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIAudioConverter" */ = {
-			isa = XCLocalSwiftPackageReference;
-			relativePath = Packages/MIDIAudioConverter;
-		};
-/* End XCLocalSwiftPackageReference section */
-
-/* Begin XCSwiftPackageProductDependency section */
-		4DE4BC8C2F90800100000001 /* MIDIAudioConverter */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = 4DE4BC8B2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIAudioConverter" */;
-			productName = MIDIAudioConverter;
-		};
-/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B392DE182F8B53A20000E8EC /* Debug */ = {
@@ -355,6 +356,57 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCLocalSwiftPackageReference section */
+		4DE4BC8B2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIAudioConverter" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MIDIAudioConverter;
+		};
+		4DE4BC8E2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDINotationConverter" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MIDINotationConverter;
+		};
+		4DE4BC912F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIInputKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MIDIInputKit;
+		};
+		4DE4BC942F90800100000001 /* XCLocalSwiftPackageReference "Packages/PianoPracticeCore" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/PianoPracticeCore;
+		};
+		4DE4BC972F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIPracticeKit" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = Packages/MIDIPracticeKit;
+		};
+/* End XCLocalSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		4DE4BC8C2F90800100000001 /* MIDIAudioConverter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4DE4BC8B2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIAudioConverter" */;
+			productName = MIDIAudioConverter;
+		};
+		4DE4BC8F2F90800100000001 /* MIDINotationConverter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4DE4BC8E2F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDINotationConverter" */;
+			productName = MIDINotationConverter;
+		};
+		4DE4BC922F90800100000001 /* MIDIInputKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4DE4BC912F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIInputKit" */;
+			productName = MIDIInputKit;
+		};
+		4DE4BC952F90800100000001 /* PianoPracticeCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4DE4BC942F90800100000001 /* XCLocalSwiftPackageReference "Packages/PianoPracticeCore" */;
+			productName = PianoPracticeCore;
+		};
+		4DE4BC982F90800100000001 /* MIDIPracticeKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 4DE4BC972F90800100000001 /* XCLocalSwiftPackageReference "Packages/MIDIPracticeKit" */;
+			productName = MIDIPracticeKit;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = B392DE072F8B53A10000E8EC /* Project object */;
 }
